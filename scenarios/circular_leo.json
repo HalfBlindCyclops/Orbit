@@ -1,0 +1,9 @@
+{
+  "name": "circular_leo",
+  "description": "Three co-planar LEO objects at 380-420 km altitude for RK4 validation",
+  "entities": [
+    { "id": 1, "name": "leo_sat_1", "kind": "satellite", "altitude_m": 400000, "phase_rad": 0.0, "mass_kg": 800 },
+    { "id": 2, "name": "leo_sat_2", "kind": "satellite", "altitude_m": 420000, "phase_rad": 2.094395102, "mass_kg": 750 },
+    { "id": 3, "name": "leo_interceptor", "kind": "interceptor", "altitude_m": 380000, "phase_rad": 4.188790205, "mass_kg": 600 }
+  ]
+}

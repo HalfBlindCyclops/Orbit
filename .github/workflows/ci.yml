@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-test:
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+
+      - name: Setup vcpkg
+        uses: microsoft/setup-vcpkg@v1
+
+      - name: Install dependencies
+        run: vcpkg install
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+
+      - name: Configure
+        run: cmake --preset default
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+
+      - name: Build
+        run: cmake --build build/default --config Debug
+
+      - name: Test
+        run: ctest --test-dir build/default --output-on-failure --build-config Debug
+
+  determinism:
+    name: Golden hash (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup vcpkg
+        uses: microsoft/setup-vcpkg@v1
+
+      - name: Install dependencies
+        run: vcpkg install
+
+      - name: Configure
+        run: cmake --preset default
+
+      - name: Build
+        run: cmake --build build/default
+
+      - name: Test determinism
+        working-directory: build/default
+        run: ctest -R Determinism --output-on-failure
+
+  sanitizer:
+    name: ASan + UBSan (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup vcpkg
+        uses: microsoft/setup-vcpkg@v1
+
+      - name: Install dependencies
+        run: vcpkg install
+
+      - name: Configure (asan preset)
+        run: cmake --preset asan
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+
+      - name: Build
+        run: cmake --build build/asan --config Debug
+
+      - name: Test
+        run: ctest --test-dir build/asan --output-on-failure --build-config Debug
+
+  valgrind:
+    name: Valgrind Memcheck (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup vcpkg
+        uses: microsoft/setup-vcpkg@v1
+
+      - name: Install dependencies
+        run: vcpkg install
+
+      - name: Install Valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+
+      - name: Configure
+        run: cmake --preset default
+
+      - name: Build
+        run: cmake --build build/default
+
+      - name: Valgrind unit tests
+        working-directory: build/default
+        run: |
+          valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 \
+            ./orbit_tests
+
+      - name: Valgrind short simulation
+        working-directory: build/default
+        run: |
+          valgrind --leak-check=full --error-exitcode=1 \
+            ./orbit_sim --scenario smoke --duration 5 --headless --no-sensors

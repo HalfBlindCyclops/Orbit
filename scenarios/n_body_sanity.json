@@ -1,0 +1,6 @@
+{
+  "name": "n_body_sanity",
+  "description": "LEO trio with J2 + lunar gravity and sensor tracking enabled",
+  "gravity_model": "n_body_j2_moon",
+  "entities": []
+}

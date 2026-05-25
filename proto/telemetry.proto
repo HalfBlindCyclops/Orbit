@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package orbit.telemetry;
+
+option cc_enable_arenas = true;
+
+message Vec3d {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message EntityState {
+  uint32 entity_id = 1;
+  string name = 2;
+  Vec3d position_m = 3;
+  Vec3d velocity_mps = 4;
+  double mass_kg = 5;
+  double fuel_kg = 6;
+}
+
+message FlightComputerStatus {
+  uint32 entity_id = 1;
+  double power_allocated_w = 2;
+  double thrust_n = 3;
+  string propulsion_stage = 4;
+  repeated string active_faults = 5;
+}
+
+message TrackReport {
+  uint32 track_id = 1;
+  uint32 source_sensor_id = 2;
+  Vec3d estimated_position_m = 3;
+  double time_to_intercept_s = 4;
+}
+
+message SimulationTick {
+  uint32 schema_version = 1;
+  uint64 tick_index = 2;
+  double sim_time_s = 3;
+  uint64 wall_time_ns = 4;
+  uint64 dropped_frames = 5;
+  repeated EntityState entities = 6;
+  repeated FlightComputerStatus flight_computers = 7;
+  repeated TrackReport tracks = 8;
+}
