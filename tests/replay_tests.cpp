@@ -49,6 +49,7 @@ TEST(Replay, RecordAndPlaybackRoundtrip) {
   }
 
   EXPECT_EQ(frames, 30U);
+  player.close();
   fs::remove(path);
 }
 
@@ -73,6 +74,7 @@ TEST(Replay, EncodeDecodeMatchesRecorderFrame) {
   EXPECT_EQ(dropped, 2U);
   EXPECT_EQ(decoded.entities.size(), snap.entities.size());
 
+  player.close();
   fs::remove(path);
 }
 

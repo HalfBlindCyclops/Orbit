@@ -147,13 +147,11 @@ jobs:
         run: cmake --build build/default
 
       - name: Valgrind unit tests
-        working-directory: build/default
         run: |
           valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 \
-            ./orbit_tests
+            build/default/orbit_tests
 
       - name: Valgrind short simulation
-        working-directory: build/default
         run: |
           valgrind --leak-check=full --error-exitcode=1 \
-            ./orbit_sim --scenario smoke --duration 5 --headless --no-sensors
+            build/default/orbit_sim --scenario smoke --duration 5 --headless --no-sensors
