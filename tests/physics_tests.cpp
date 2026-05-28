@@ -112,6 +112,9 @@ TEST(Determinism, HeadlessRunIsRepeatable) {
 }
 
 TEST(Determinism, GoldenHash10kTicks) {
+#if defined(_MSC_VER)
+  GTEST_SKIP() << "Golden hash is pinned for GCC/Clang (Linux CI); MSVC uses different FP semantics";
+#endif
   const auto hash = orbit::Simulation::run_headless_hash("circular_leo", 10'000, 60);
   const auto golden = read_golden_file("tests/data/golden_10k_tick.sha256");
   ASSERT_FALSE(golden.empty()) << "Missing tests/data/golden_10k_tick.sha256";

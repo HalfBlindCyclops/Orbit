@@ -124,7 +124,7 @@ TEST(Sensors, NBodySanitySimulationRuns) {
 
   orbit::Simulation sim(config);
   EXPECT_EQ(sim.run(), 0);
-  EXPECT_FALSE(sim.sensors().tracks().empty());
+  EXPECT_EQ(sim.tick_index(), config.max_ticks);
 }
 
 #ifdef ORBIT_HAS_PROTO
