@@ -116,7 +116,7 @@ TEST(Sensors, NBodyGravityDiffersFromTwoBody) {
 TEST(Sensors, NBodySanitySimulationRuns) {
   orbit::SimulationConfig config;
   config.scenario = "n_body_sanity";
-  config.max_ticks = 120;
+  config.max_ticks = 600;
   config.rate_hz = 60;
   config.realtime = false;
   config.sensors_enabled = true;
@@ -132,6 +132,15 @@ TEST(Sensors, NBodySanitySimulationRuns) {
 TEST(Sensors, TelemetryIncludesTracks) {
   orbit::EntityPool pool;
   orbit::load_circular_leo_preset(pool);
+
+  for (orbit::Entity& entity : pool.entities_mut()) {
+    if (entity.id == 3) {
+      entity.position = {orbit::constants::kEarthRadius + 400'000.0, 0.0, 0.0};
+      entity.velocity = {0.0, 7668.0, 0.0};
+    } else if (entity.id == 1) {
+      entity.position = {orbit::constants::kEarthRadius + 405'000.0, 20'000.0, 0.0};
+    }
+  }
 
   orbit::SensorSystem sensors;
   sensors.reset_for_pool(pool);

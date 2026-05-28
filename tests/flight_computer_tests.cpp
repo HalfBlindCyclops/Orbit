@@ -48,6 +48,10 @@ TEST(FlightComputer, TerminalPhaseStarvesStationKeeping) {
   orbit::EntityFlightComputer fc;
   fc.configure_for_entity(entity);
 
+  fc.begin_tick(0, 0.0);
+  fc.tick(entity, 0.0, false);
+  EXPECT_EQ(fc.status().propulsion_stage, "Boost");
+
   fc.begin_tick(121, 2.0);
   fc.tick(entity, 0.0, false);
   EXPECT_EQ(fc.status().propulsion_stage, "Coast");

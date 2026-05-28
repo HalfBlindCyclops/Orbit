@@ -61,6 +61,7 @@ TEST(Replay, EncodeDecodeMatchesRecorderFrame) {
   const fs::path path = fs::temp_directory_path() / "orbit_single_frame.orbitreplay";
   ASSERT_TRUE(recorder.open(path.string()));
   ASSERT_TRUE(recorder.write_tick(snap, 2));
+  recorder.close();
 
   orbit::ReplayPlayer player;
   ASSERT_TRUE(player.open(path.string()));
