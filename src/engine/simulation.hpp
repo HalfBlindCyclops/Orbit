@@ -13,6 +13,7 @@
 namespace orbit {
 
 class TelemetryHub;
+class ReplayRecorder;
 
 struct SimulationConfig {
   std::string scenario{"smoke"};
