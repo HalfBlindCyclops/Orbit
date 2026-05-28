@@ -1,5 +1,6 @@
 #include "gravity_model.hpp"
 
+#include "constants.hpp"
 #include "gravity_worker_pool.hpp"
 #include "perturbations.hpp"
 #include "physics.hpp"
