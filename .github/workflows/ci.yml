@@ -148,10 +148,14 @@ jobs:
 
       - name: Valgrind unit tests
         run: |
+          TEST_BIN="$(find build/default -name orbit_tests -type f | head -1)"
+          test -n "$TEST_BIN"
           valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 \
-            build/default/orbit_tests
+            "$TEST_BIN"
 
       - name: Valgrind short simulation
         run: |
+          SIM_BIN="$(find build/default -name orbit_sim -type f | head -1)"
+          test -n "$SIM_BIN"
           valgrind --leak-check=full --error-exitcode=1 \
-            build/default/orbit_sim --scenario smoke --duration 5 --headless --no-sensors
+            "$SIM_BIN" --scenario smoke --duration 5 --headless --no-sensors
