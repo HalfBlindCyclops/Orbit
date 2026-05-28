@@ -17,9 +17,18 @@ namespace {
 constexpr double kPi = 3.14159265358979323846;
 
 std::string read_golden_file(const char* relative_path) {
-  std::ifstream file(relative_path);
-  if (!file) {
-    file.open(std::string("../") + relative_path);
+  const std::string candidates[] = {
+      relative_path,
+      std::string("../") + relative_path,
+      std::string(ORBIT_SOURCE_DIR) + "/" + relative_path,
+  };
+
+  std::ifstream file;
+  for (const auto& path : candidates) {
+    file.open(path);
+    if (file) {
+      break;
+    }
   }
   if (!file) {
     return {};

@@ -29,7 +29,8 @@ TEST(Telemetry, SpscQueuePushPop) {
 }
 
 TEST(Telemetry, SpscQueueFull) {
-  orbit::SpscQueue<int, 2> queue;
+  // Ring buffer holds Capacity - 1 elements (one slot reserved).
+  orbit::SpscQueue<int, 3> queue;
   EXPECT_TRUE(queue.try_push(1));
   EXPECT_TRUE(queue.try_push(2));
   EXPECT_FALSE(queue.try_push(3));

@@ -114,7 +114,7 @@ EntityFlightComputer::build_requests(const Entity& /*entity*/) const {
         requests.push_back({"sensors", Priority::High, tick_index_, 200.0});
         break;
       case PropulsionStage::Terminal:
-        requests.push_back({"propulsion", Priority::Critical, tick_index_, 350.0});
+        requests.push_back({"propulsion", Priority::Critical, tick_index_, 400.0});
         requests.push_back({"sensors", Priority::High, tick_index_, 180.0});
         requests.push_back({"station_keeping", Priority::Low, tick_index_, 100.0});
         break;

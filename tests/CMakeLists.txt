@@ -15,6 +15,11 @@ target_link_libraries(orbit_tests
     GTest::gtest_main
 )
 
+target_compile_definitions(orbit_tests
+  PRIVATE
+    ORBIT_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+)
+
 if(ORBIT_BUILD_PROTO)
   target_compile_definitions(orbit_tests PRIVATE ORBIT_HAS_PROTO=1)
 endif()

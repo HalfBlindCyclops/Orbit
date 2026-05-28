@@ -60,6 +60,15 @@ TEST(Sensors, SensorSystemProducesTracks) {
   orbit::EntityPool pool;
   orbit::load_circular_leo_preset(pool);
 
+  for (orbit::Entity& entity : pool.entities_mut()) {
+    if (entity.id == 3) {
+      entity.position = {orbit::constants::kEarthRadius + 400'000.0, 0.0, 0.0};
+      entity.velocity = {0.0, 7668.0, 0.0};
+    } else if (entity.id == 1) {
+      entity.position = {orbit::constants::kEarthRadius + 405'000.0, 20'000.0, 0.0};
+    }
+  }
+
   orbit::SensorSystem system;
   system.reset_for_pool(pool);
   system.update(pool, 100, 1.0 / 60.0);
