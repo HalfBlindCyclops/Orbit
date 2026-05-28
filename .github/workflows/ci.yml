@@ -22,7 +22,19 @@ jobs:
         if: runner.os == 'Windows'
 
       - name: Setup vcpkg
-        uses: microsoft/setup-vcpkg@v1
+        shell: bash
+        run: |
+          VCPKG_DIR="${RUNNER_TEMP}/vcpkg"
+          if [ ! -d "$VCPKG_DIR" ]; then
+            git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+          fi
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            "$VCPKG_DIR/bootstrap-vcpkg.bat" -disableMetrics
+          else
+            "$VCPKG_DIR/bootstrap-vcpkg.sh" -disableMetrics
+          fi
+          echo "VCPKG_ROOT=$VCPKG_DIR" >> "$GITHUB_ENV"
+          echo "$VCPKG_DIR" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: vcpkg install
@@ -47,13 +59,23 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup vcpkg
-        uses: microsoft/setup-vcpkg@v1
+        shell: bash
+        run: |
+          VCPKG_DIR="${RUNNER_TEMP}/vcpkg"
+          if [ ! -d "$VCPKG_DIR" ]; then
+            git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+          fi
+          "$VCPKG_DIR/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$VCPKG_DIR" >> "$GITHUB_ENV"
+          echo "$VCPKG_DIR" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: vcpkg install
 
       - name: Configure
         run: cmake --preset default
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
 
       - name: Build
         run: cmake --build build/default
@@ -69,7 +91,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup vcpkg
-        uses: microsoft/setup-vcpkg@v1
+        shell: bash
+        run: |
+          VCPKG_DIR="${RUNNER_TEMP}/vcpkg"
+          if [ ! -d "$VCPKG_DIR" ]; then
+            git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+          fi
+          "$VCPKG_DIR/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$VCPKG_DIR" >> "$GITHUB_ENV"
+          echo "$VCPKG_DIR" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: vcpkg install
@@ -92,7 +122,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup vcpkg
-        uses: microsoft/setup-vcpkg@v1
+        shell: bash
+        run: |
+          VCPKG_DIR="${RUNNER_TEMP}/vcpkg"
+          if [ ! -d "$VCPKG_DIR" ]; then
+            git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+          fi
+          "$VCPKG_DIR/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$VCPKG_DIR" >> "$GITHUB_ENV"
+          echo "$VCPKG_DIR" >> "$GITHUB_PATH"
 
       - name: Install dependencies
         run: vcpkg install
@@ -102,6 +140,8 @@ jobs:
 
       - name: Configure
         run: cmake --preset default
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
 
       - name: Build
         run: cmake --build build/default

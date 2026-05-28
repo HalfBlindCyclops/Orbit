@@ -78,10 +78,6 @@
     {
       "name": "asan",
       "configurePreset": "asan"
-    },
-    {
-      "name": "release",
-      "configurePreset": "release"
     }
   ],
   "testPresets": [
