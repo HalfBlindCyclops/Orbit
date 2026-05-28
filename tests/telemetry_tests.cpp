@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "entity.hpp"
+#include "flight_computer.hpp"
 #include "scenario.hpp"
 #include "spsc_queue.hpp"
 #include "snapshot_builder.hpp"
